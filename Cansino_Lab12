@@ -1,0 +1,106 @@
+class FoodOrderingSystem:
+    def __init__(self):
+        self.menu = {
+            "Burger": 5.99,
+            "Pizza": 8.99,
+            "Salad": 4.99,
+            "Pasta": 7.99,
+            "Drink": 1.99
+        }
+        self.order = {}
+
+    def display_menu(self):
+        print("\nMenu:")
+        for item, price in self.menu.items():
+            print(f"{item}: ${price:.2f}")
+
+    def add_to_order(self):
+        self.display_menu()
+        item = input("Enter the item you want to add to your order: ").capitalize()
+        if item in self.menu:
+            quantity = int(input(f"Enter the quantity of {item}: "))
+            if item in self.order:
+                self.order[item] += quantity
+            else:
+                self.order[item] = quantity
+            print(f"Added {quantity} {item}(s) to your order.")
+        else:
+            print("Sorry, that item is not on the menu.")
+
+    def remove_from_order(self):
+        if not self.order:
+            print("Your order is empty.")
+            return
+        
+        print("\nYour current order:")
+        for item, quantity in self.order.items():
+            print(f"{item}: {quantity}")
+        
+        item = input("Enter the item you want to remove: ").capitalize()
+        if item in self.order:
+            quantity = int(input(f"Enter the quantity of {item} to remove: "))
+            if quantity >= self.order[item]:
+                del self.order[item]
+                print(f"Removed all {item}(s) from your order.")
+            else:
+                self.order[item] -= quantity
+                print(f"Removed {quantity} {item}(s) from your order.")
+        else:
+            print("That item is not in your order.")
+
+    def view_order(self):
+        if not self.order:
+            print("Your order is empty.")
+            return
+        
+        print("\nYour current order:")
+        total = 0
+        for item, quantity in self.order.items():
+            price = self.menu[item] * quantity
+            total += price
+            print(f"{item} (x{quantity}): ${price:.2f}")
+        print(f"Total: ${total:.2f}")
+
+    def checkout(self):
+        if not self.order:
+            print("Your order is empty. Add items before checking out.")
+            return
+        
+        self.view_order()
+        confirm = input("Do you want to proceed to checkout? (yes/no): ").lower()
+        if confirm == 'yes':
+            print("Thank you for your order! Enjoy your meal.")
+            self.order.clear()
+        else:
+            print("Checkout canceled. You can continue ordering.")
+
+    def run(self):
+        while True:
+            print("\nOptions:")
+            print("1. View Menu")
+            print("2. Add to Order")
+            print("3. Remove from Order")
+            print("4. View Order")
+            print("5. Checkout")
+            print("6. Exit")
+            
+            choice = input("Choose an option (1-6): ")
+            if choice == '1':
+                self.display_menu()
+            elif choice == '2':
+                self.add_to_order()
+            elif choice == '3':
+                self.remove_from_order()
+            elif choice == '4':
+                self.view_order()
+            elif choice == '5':
+                self.checkout()
+            elif choice == '6':
+                print("Thank you for using the Food Ordering System. Goodbye!")
+                break
+            else:
+                print("Invalid option. Please try again.")
+
+if __name__ == "__main__":
+    system = FoodOrderingSystem()
+    system.run()
